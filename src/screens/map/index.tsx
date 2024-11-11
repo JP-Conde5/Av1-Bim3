@@ -1,38 +1,50 @@
 import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import MapView, { Marker, Polyline, Region } from "react-native-maps";
 import { styles } from "./styles";
 import { ILocation } from "../input";
+import {DrawerTypes} from "../../navigation/drawer.navigation"
+import { TouchableOpacity } from "react-native";
+import AnimatedMapRegion from "react-native-maps/lib/AnimatedRegion";
 
-export function Map(location:ILocation){
+export function Map(location:ILocation, {navigation}:DrawerTypes){
     const [marker, setMarker] = useState<Region[]>()
+    function input(){
+        return(
+            <TouchableOpacity onPress={() => navigation.navigate("Localizar")}/>
+        )
+    }
     useEffect(() => {
-        {location &&
+        if(!location){
+            Alert.alert("ERRO", "Insira um valor válido para latitude e longitude da origem e de destino", )
+            input()
+        }else{
             setMarker([{
-                latitude: location.origin.latitude as unknown as number,
-                longitude: location.origin.longitude as unknown as number,
+                latitude: location.origin?.latitude as number,
+                longitude: location.origin?.longitude as number,
                 latitudeDelta: 0.004,
                 longitudeDelta: 0.004
             }])
             setMarker([{
-                latitude: location.destination.latitude as unknown as number,
-                longitude: location.destination.longitude as unknown as number,
+                latitude: location.destination?.latitude as number,
+                longitude: location.destination?.longitude  as number,
                 latitudeDelta: 0.004,
                 longitudeDelta: 0.004
             }])
         }
     }, [])
     return(
-        <MapView style={styles.container} region={location.origin}>
+        <MapView style={styles.container} region={location.origin as AnimatedMapRegion}>
             {marker && marker.map((item) => (
-                <Marker id={item.latitude} coordinate={item}/>
+                <Marker coordinate={item}/>
             ))}
-            <Polyline
-                    coordinates={[
-                        {latitude: location.origin.latitude, longitude: location.origin.longitude},
-                        {latitude: location.destination.latitude, longitude: location.destination.longitude}
-                    ]}
-            />
+            {location.origin && location.destination && 
+                <Polyline
+                        coordinates={[{latitude: location.origin.latitude as number, longitude: location.origin.longitude as number},
+                            {latitude: location.destination.latitude as number, longitude: location.destination.longitude as number}
+                        ]}
+                />
+            }
         </MapView>
     )
 }
