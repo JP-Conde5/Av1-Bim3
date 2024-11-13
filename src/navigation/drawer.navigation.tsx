@@ -6,7 +6,7 @@ import { colors } from "../styles/colors";
 
 type DrawerParam = {
     Localizar: undefined,
-    Mapa: ILocation,
+    Mapa: undefined | ILocation,
 }
 
 type DrawerScreenNavigation = DrawerNavigationProp<DrawerParam, "Localizar">
@@ -19,9 +19,11 @@ export function MenuDrawer(){
     return(
         <Drawer.Navigator screenOptions={{
             headerStyle:{backgroundColor: colors.primary},
-            drawerActiveBackgroundColor: colors.secondary,
-            drawerInactiveBackgroundColor: colors.primary,
-            drawerStyle:{backgroundColor: colors.secondary}
+            drawerActiveBackgroundColor: colors.primary,
+            drawerInactiveBackgroundColor: colors.secondary,
+            drawerStyle:{backgroundColor: colors.secondary},
+            drawerActiveTintColor:colors.white,
+            drawerInactiveTintColor: colors.black
 
         }}>
             <Drawer.Screen name="Localizar" component={ScreenInput} options={{

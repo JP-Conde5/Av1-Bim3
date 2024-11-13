@@ -15,15 +15,26 @@ export const styles = StyleSheet.create({
     title:{
         fontSize: 24,
         fontWeight: '600',
-        marginBottom: 30
+        marginBottom: 15
     },
     write:{
-        fontSize: 20,
-        borderColor: colors.secondary
+        fontSize: 15,
+        width: 250,
+        borderWidth: 2,
+        borderColor: colors.secondary,
+        borderRadius: 8,
+        margin: 5,
     },
     button:{
         backgroundColor: colors.secondary,
-        width: 
+        width: 200,
+        borderWidth: 10,
+        borderColor: colors.secondary,
+        borderRadius: 8
+    },
+    text:{
+        textAlign: 'center',
+        fontSize: 20,
     }
 
 })
