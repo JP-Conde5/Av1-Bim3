@@ -4,14 +4,10 @@ import { styles } from "./styles";
 import {DrawerTypes} from "../../navigation/drawer.navigation";
 
 export interface ILocation{
-    origin?:{
-        latitude?: number,
-        longitude?: number,
-    },
-    destination?:{
-        latitude?: number,
-        longitude?: number,
-    }
+    originLatitude?: number,
+    originLongitude?: number,
+    destinationLatitude?: number,
+    destinationLongitude?: number
 }
 
 export function Input({navigation}:DrawerTypes){
@@ -21,7 +17,8 @@ export function Input({navigation}:DrawerTypes){
         console.log(itemLocation)
     }
     function handleShowMap() {
-        if (!location?.origin?.latitude || !location?.origin?.latitude || !location?.origin?.latitude || !location?.origin?.latitude) {
+        console.log({location})
+        if (!(location?.originLatitude && location?.originLongitude && location?.destinationLatitude && location?.destinationLongitude)) {
             Alert.alert("Preencha todo o formulário!")
         } else {
             navigation.navigate("Mapa", location as ILocation)
@@ -34,12 +31,12 @@ export function Input({navigation}:DrawerTypes){
                 <TextInput
                     style={styles.write}
                     placeholder="Latitude"
-                    onChangeText={(i) => handleChange({origin:{latitude:Number(i)}})}
+                    onChangeText={(i) => handleChange({originLatitude:Number(i)})}
                 />
                 <TextInput
                     style={styles.write}
                     placeholder="Logitude"
-                    onChangeText={(i) => handleChange({origin:{longitude:Number(i)}})}
+                    onChangeText={(i) => handleChange({originLongitude: Number(i)})}
                 />
             </View>
             <View style={styles.section}>
@@ -47,12 +44,12 @@ export function Input({navigation}:DrawerTypes){
                 <TextInput
                     style={styles.write}
                     placeholder="Latitude"
-                    onChangeText={(i) => handleChange({destination:{latitude:Number(i)}})}
+                    onChangeText={(i) => handleChange({destinationLatitude: Number(i)})}
                 />
                 <TextInput 
                     style={styles.write}
                     placeholder="Logitude"
-                    onChangeText={(i) => handleChange({destination:{longitude:Number(i)}})}
+                    onChangeText={(i) => handleChange({destinationLongitude: Number(i)})}
                 />    
             </View>
             <TouchableOpacity style={styles.button} onPress={()=>handleShowMap()}><Text style={styles.text}>Entrar</Text></TouchableOpacity>

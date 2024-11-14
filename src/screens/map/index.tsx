@@ -5,7 +5,6 @@ import { styles } from "./styles";
 import { ILocation } from "../input";
 import { useRoute } from "@react-navigation/native";
 import {DrawerTypes} from "../../navigation/drawer.navigation"
-import { TouchableOpacity } from "react-native";
 import AnimatedMapRegion from "react-native-maps/lib/AnimatedRegion";
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -13,12 +12,17 @@ export function Map({navigation}:DrawerTypes){
     const [error, setError] = useState<string>()
     const route = useRoute()
     const location = route.params as ILocation
-    const test = location && location.origin?.latitude && location.origin?.longitude && location.destination?.latitude && location.destination?.longitude
+    const [origin, setOrigin] = useState<Region>()
+    const [destination, setDestination] = useState<Region>()
+    const test = location && location.originLatitude && location.originLongitude && location.destinationLatitude && location.destinationLongitude
     useEffect(() => {
         if(!(test)){
             navigation.navigate('Localizar')
             Alert.alert('Faltando dados!!!')
             setError('Faltando dados!!!')
+        }else{
+            setOrigin({latitude: location.originLatitude as number, longitude: location.originLongitude as number, latitudeDelta: 0.04, longitudeDelta: 0.04})
+            setDestination({latitude: location.destinationLatitude as number, longitude: location.destinationLongitude as number, latitudeDelta: 0.04, longitudeDelta: 0.04})
         }
     }, [])
     if(!(test)){
@@ -30,17 +34,17 @@ export function Map({navigation}:DrawerTypes){
     }
     else{
         return(
-            <MapView style={styles.container} region={location.origin as AnimatedMapRegion}>
-                <Marker coordinate={location.origin as Region}>
+            <MapView style={styles.container} region={origin}>
+                <Marker coordinate={origin as Region}>
                     <MaterialIcons name="location-history"/>
                 </Marker>
-                <Marker coordinate={location.destination as Region}>
+                <Marker coordinate={destination as Region}>
                     <MaterialIcons name="location-history"/>
                 </Marker>
-                {location.origin && location.destination &&
+                {origin && destination &&
                     <Polyline
-                            coordinates={[{latitude: location.origin.latitude as number, longitude: location.origin.longitude as number},
-                                {latitude: location.destination.latitude as number, longitude: location.destination.longitude as number}
+                            coordinates={[{latitude: origin.latitude, longitude: origin.longitude as number},
+                                {latitude: destination.latitude, longitude: destination.longitude}
                             ]}
                     />
                 }
